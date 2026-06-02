@@ -1,8 +1,7 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { useTheme } from 'next-themes';
-import { Plus, Edit2, Trash2, Loader2, X } from 'lucide-react';
-import { toast } from 'sonner';
+import React from 'react';
+import { useResolvedTheme } from '@/hooks/useResolvedTheme';
+import { Plus, Edit2, Trash2, Users, Trophy, Clock } from 'lucide-react';
 
 interface Segment {
   id: number;
@@ -25,34 +24,8 @@ interface Segment {
 }
 
 export default function AdminSegmentsPage() {
-  const { theme } = useTheme();
-  const [segments, setSegments] = useState<Segment[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingSegment, setEditingSegment] = useState<Segment | null>(null);
-
-  const [form, setForm] = useState({
-    name: '',
-    description: '',
-    rules: '',
-    prizePool: '',
-    category: 'General',
-    type: 'Team',
-    difficulty: 'Medium',
-    teamSize: '',
-    fee: '',
-    deadline: '',
-    location: '',
-    scheduleText: '',
-    ruleBookUrl: '',
-    highlights: '',
-    status: 'active',
-    imageUrl: '',
-  });
-
-  const isDark = theme === 'dark';
-  const cardBg = isDark ? 'bg-[#111116] border-white/[0.07]' : 'bg-white border-black/[0.08]';
+  const { isDark } = useResolvedTheme();
+  const cardBg = isDark ? 'bg-[#111116] border-white/[0.07] hover:bg-[#111116]' : 'bg-white border-black/[0.08] hover:shadow-[0_2px_12px_rgba(0,0,0,0.12)]';
   const textColor = isDark ? 'text-[#F5F5F0]' : 'text-[#1a1a14]';
   const mutedText = isDark ? 'text-[#9A9A8E]' : 'text-[#4a4a40]';
 

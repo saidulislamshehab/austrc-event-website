@@ -14,11 +14,13 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID || "placeholder_google_client_id",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "placeholder_google_client_secret",
       profile(profile) {
+        const DEFAULT_AVATAR =
+          "https://res.cloudinary.com/dxyhzgrul/image/upload/v1780398181/silver-membership-icon-default-avatar-profile-icon-membership-icon-social-media-user-image-vector-illustration_561158-4215_bdeofc.jpg";
         return {
           id: profile.sub,
           name: profile.name,
           email: profile.email,
-          image: profile.picture,
+          image: profile.picture || DEFAULT_AVATAR,
           role: "user",
         };
       },
