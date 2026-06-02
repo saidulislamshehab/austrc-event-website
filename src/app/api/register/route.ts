@@ -33,6 +33,8 @@ export async function POST(request: Request) {
             role: "user",
             university: institution,
             phone: phone,
+            avatarUrl:
+              "https://res.cloudinary.com/dxyhzgrul/image/upload/v1780398181/silver-membership-icon-default-avatar-profile-icon-membership-icon-social-media-user-image-vector-illustration_561158-4215_bdeofc.jpg",
           } as any,
         });
       }
