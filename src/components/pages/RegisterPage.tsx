@@ -32,20 +32,20 @@ export default function RegisterPage() {
     segment: '',
   });
 
-  const segments = [
-    'Line Following Robot',
-    'Maze Solving Robot',
-    'Robo Soccer',
-    'Project Showcase',
-    'Innovation Challenge',
-  ];
+  const [dbSegments, setDbSegments] = useState<Array<{ id: number; name: string }>>([]);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     async function checkRegistration() {
       try {
-        const res = await fetch('/api/settings');
-        if (res.ok) {
-          const settings = await res.json();
+        // Fetch settings and segments in parallel
+        const [settingsRes, segmentsRes] = await Promise.all([
+          fetch('/api/settings'),
+          fetch('/api/segments')
+        ]);
+
+        if (settingsRes.ok) {
+          const settings = await settingsRes.json();
           
           // Check deadline
           const deadline = settings.registration_deadline ? new Date(settings.registration_deadline) : null;
@@ -80,8 +80,13 @@ export default function RegisterPage() {
             maxMembers: parseInt(settings.max_members_per_team) || 5,
           });
         }
+
+        if (segmentsRes.ok) {
+          const segmentsList = await segmentsRes.json();
+          setDbSegments(segmentsList);
+        }
       } catch (err) {
-        console.error('Error fetching settings:', err);
+        console.error('Error fetching settings/segments:', err);
       } finally {
         setLoading(false);
       }
@@ -111,10 +116,31 @@ export default function RegisterPage() {
     return () => clearInterval(interval);
   }, [deadlineDate, router]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Registration submitted:', formData);
-    alert('Registration submitted successfully! You will receive a confirmation email shortly.');
+    setSubmitting(true);
+    try {
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        alert(data.message || 'Registration submitted successfully!');
+        router.push('/dashboard/events');
+      } else {
+        alert(data.message || 'Failed to submit registration.');
+      }
+    } catch (err) {
+      console.error('Error submitting registration:', err);
+      alert('An error occurred. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -334,9 +360,9 @@ export default function RegisterPage() {
                   style={{ fontSize: '16px' }}
                 >
                   <option value="" className="bg-[#18181f]">Select a segment</option>
-                  {segments.map((seg) => (
-                    <option key={seg} value={seg} className="bg-[#18181f]">
-                      {seg}
+                  {dbSegments.map((seg) => (
+                    <option key={seg.id} value={seg.name} className="bg-[#18181f]">
+                      {seg.name}
                     </option>
                   ))}
                 </select>
@@ -345,10 +371,17 @@ export default function RegisterPage() {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full bg-[#3a5a40] text-white py-4 rounded-lg font-semibold hover:bg-[#344e41] transition-all hover:scale-[1.02] shadow-[0_2px_12px_rgba(0,0,0,0.20)] flex items-center justify-center gap-2 mt-6"
+                disabled={submitting}
+                className="w-full bg-[#3a5a40] text-white py-4 rounded-lg font-semibold hover:bg-[#344e41] transition-all hover:scale-[1.02] shadow-[0_2px_12px_rgba(0,0,0,0.20)] flex items-center justify-center gap-2 mt-6 disabled:opacity-75 disabled:cursor-not-allowed"
               >
-                Submit Registration
-                <ArrowRight className="w-5 h-5" />
+                {submitting ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <>
+                    Submit Registration
+                    <ArrowRight className="w-5 h-5" />
+                  </>
+                )}
               </button>
             </div>
 

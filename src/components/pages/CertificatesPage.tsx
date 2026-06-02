@@ -12,32 +12,40 @@ export default function CertificatesPage() {
   const [loading, setLoading] = useState(true);
   const [enabled, setEnabled] = useState(true);
 
-  const certificates = [
-    {
-      id: 1,
-      event: 'Sumo Bot Championship',
-      type: 'Participation',
-      date: 'May 18, 2026',
-      rank: '4th Place',
-      image: 'https://images.unsplash.com/photo-1535378917042-10a22c95931a?w=800&q=80',
-    },
-  ];
+  const [certificates, setCertificates] = useState<Array<{
+    id: number;
+    event: string;
+    type: string;
+    date: string;
+    rank: string;
+    image: string;
+    fileUrl: string;
+  }>>([]);
 
   useEffect(() => {
-    async function loadSettings() {
+    async function loadData() {
       try {
-        const res = await fetch('/api/settings');
-        if (res.ok) {
-          const settings = await res.json();
+        const [settingsRes, certificatesRes] = await Promise.all([
+          fetch('/api/settings'),
+          fetch('/api/dashboard/certificates'),
+        ]);
+
+        if (settingsRes.ok) {
+          const settings = await settingsRes.json();
           setEnabled(settings.enable_certificates !== 'false');
         }
+
+        if (certificatesRes.ok) {
+          const certs = await certificatesRes.json();
+          setCertificates(certs);
+        }
       } catch (err) {
-        console.error(err);
+        console.error('Error loading certificates data:', err);
       } finally {
         setLoading(false);
       }
     }
-    loadSettings();
+    loadData();
   }, []);
 
   if (loading) {

@@ -11,6 +11,14 @@ export default function LeaderboardPage() {
   const [selectedEvent, setSelectedEvent] = useState('overall');
   const [loading, setLoading] = useState(true);
   const [enabled, setEnabled] = useState(true);
+  const [leaderboard, setLeaderboard] = useState<Array<{
+    rank: number;
+    name: string;
+    university: string;
+    points: number;
+    avatar: string;
+    isCurrentUser?: boolean;
+  }>>([]);
 
   const events = [
     { id: 'overall', name: 'Overall Ranking' },
@@ -19,32 +27,30 @@ export default function LeaderboardPage() {
     { id: 'sumo-bot', name: 'Sumo Bot' },
   ];
 
-  const leaderboard = [
-    { rank: 1, name: 'Team Alpha', university: 'BUET', points: 950, avatar: 'https://api.dicebear.com/7.x/shapes/svg?seed=alpha' },
-    { rank: 2, name: 'Robo Warriors', university: 'DU', points: 920, avatar: 'https://api.dicebear.com/7.x/shapes/svg?seed=warriors' },
-    { rank: 3, name: 'Tech Titans', university: 'CUET', points: 890, avatar: 'https://api.dicebear.com/7.x/shapes/svg?seed=titans' },
-    { rank: 4, name: 'CyberKnights', university: 'BUET', points: 850, avatar: 'https://api.dicebear.com/7.x/shapes/svg?seed=cyber', isCurrentUser: true },
-    { rank: 5, name: 'MechMinds', university: 'DU', points: 820, avatar: 'https://api.dicebear.com/7.x/shapes/svg?seed=mech' },
-    { rank: 6, name: 'Code Crushers', university: 'RUET', points: 790, avatar: 'https://api.dicebear.com/7.x/shapes/svg?seed=code' },
-    { rank: 7, name: 'Circuit Breakers', university: 'KUET', points: 760, avatar: 'https://api.dicebear.com/7.x/shapes/svg?seed=circuit' },
-    { rank: 8, name: 'Volt Vectors', university: 'DU', points: 730, avatar: 'https://api.dicebear.com/7.x/shapes/svg?seed=volt' },
-  ];
-
   useEffect(() => {
-    async function loadSettings() {
+    async function loadData() {
       try {
-        const res = await fetch('/api/settings');
-        if (res.ok) {
-          const settings = await res.json();
+        const [settingsRes, leaderboardRes] = await Promise.all([
+          fetch('/api/settings'),
+          fetch('/api/dashboard/leaderboard'),
+        ]);
+
+        if (settingsRes.ok) {
+          const settings = await settingsRes.json();
           setEnabled(settings.enable_leaderboard !== 'false');
         }
+
+        if (leaderboardRes.ok) {
+          const leaderboardData = await leaderboardRes.json();
+          setLeaderboard(leaderboardData);
+        }
       } catch (err) {
-        console.error(err);
+        console.error('Error loading leaderboard data:', err);
       } finally {
         setLoading(false);
       }
     }
-    loadSettings();
+    loadData();
   }, []);
 
   const getRankIcon = (rank: number) => {
