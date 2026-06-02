@@ -102,11 +102,31 @@ export async function POST(request: Request) {
     let dbSegment = await prisma.segment.findFirst({
       where: {
         name: {
-          contains: segment,
+          equals: segment,
           mode: "insensitive",
         },
       },
     });
+
+    if (!dbSegment) {
+      dbSegment = await prisma.segment.findFirst({
+        where: {
+          name: {
+            contains: segment,
+            mode: "insensitive",
+          },
+        },
+      });
+    }
+
+    // Try finding by ID if the frontend passed ID
+    if (!dbSegment && !isNaN(parseInt(segment))) {
+      dbSegment = await prisma.segment.findUnique({
+        where: {
+          id: parseInt(segment),
+        },
+      });
+    }
 
     // Fallback: If not found, check standard list or take first segment
     if (!dbSegment) {

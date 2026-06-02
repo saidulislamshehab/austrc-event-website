@@ -61,8 +61,8 @@ export default function AdminSchedulePage() {
       const scheduleData = await scheduleRes.json();
       const segmentsData = await segmentsRes.json();
 
-      setEvents(scheduleData);
-      setSegments(segmentsData);
+      setEvents(Array.isArray(scheduleData) ? scheduleData : []);
+      setSegments(Array.isArray(segmentsData) ? segmentsData : []);
     } catch (error) {
       console.error(error);
       toast.error('Could not load schedule or segments');

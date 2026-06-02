@@ -47,10 +47,21 @@ export const Segments = () => {
   const fetchSegments = async () => {
     try {
       const response = await fetch('/api/segments');
-      const data = await response.json();
-      setSegments(data);
+      if (response.ok) {
+        const data = await response.json();
+        if (Array.isArray(data)) {
+          setSegments(data);
+        } else {
+          console.error('Expected array of segments, received:', data);
+          setSegments([]);
+        }
+      } else {
+        console.error('Failed to fetch segments, status:', response.status);
+        setSegments([]);
+      }
     } catch (error) {
       console.error('Failed to fetch segments:', error);
+      setSegments([]);
     }
   };
 
@@ -248,10 +259,12 @@ export const Segments = () => {
         {/* Left Arrow */}
         <button
           onClick={() => {
+            if (segments.length === 0) return;
             setCurrentIndex((prev) => (prev - 1 + segments.length) % segments.length);
             setFlippedIndex(null);
           }}
-          className="absolute left-4 top-1/2 z-20 w-11 h-11 rounded-full flex items-center justify-center text-[#a3b18a] hover:scale-110 transition-all"
+          disabled={segments.length === 0}
+          className="absolute left-4 top-1/2 z-20 w-11 h-11 rounded-full flex items-center justify-center text-[#a3b18a] hover:scale-110 transition-all disabled:opacity-50 disabled:pointer-events-none"
           style={{
             transform: 'translateY(-50%)',
             background: 'rgba(18,32,22,0.7)',
@@ -266,10 +279,12 @@ export const Segments = () => {
         {/* Right Arrow */}
         <button
           onClick={() => {
+            if (segments.length === 0) return;
             setCurrentIndex((prev) => (prev + 1) % segments.length);
             setFlippedIndex(null);
           }}
-          className="absolute right-4 top-1/2 z-20 w-11 h-11 rounded-full flex items-center justify-center text-[#a3b18a] hover:scale-110 transition-all"
+          disabled={segments.length === 0}
+          className="absolute right-4 top-1/2 z-20 w-11 h-11 rounded-full flex items-center justify-center text-[#a3b18a] hover:scale-110 transition-all disabled:opacity-50 disabled:pointer-events-none"
           style={{
             transform: 'translateY(-50%)',
             background: 'rgba(18,32,22,0.7)',

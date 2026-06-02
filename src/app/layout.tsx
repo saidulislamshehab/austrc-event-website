@@ -4,6 +4,7 @@ import "@/styles/tailwind.css";
 import "@/styles/theme.css";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { AuthProvider } from "@/components/providers/AuthProvider";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "AUSTRC - ARC 3.0",
@@ -21,6 +22,7 @@ export default function RootLayout({
         <AuthProvider>
           <ThemeProvider attribute="class" defaultTheme="dark">
             {children}
+            <Toaster />
           </ThemeProvider>
         </AuthProvider>
       </body>

@@ -12,9 +12,11 @@ import {
   Trophy,
   Mail,
   Loader2,
+  Lock,
 } from "lucide-react";
 import { Link } from "@/lib/router-compat";
 import { toast } from "sonner"; // Import Sonner Toast for consistent UI toasts
+import { signIn } from "next-auth/react";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -41,10 +43,12 @@ export default function RegisterPage() {
     phone: "",
     members: "",
     segment: "",
+    password: "",
+    confirmPassword: "",
   });
 
   const [dbSegments, setDbSegments] = useState<
-    Array<{ id: number; name: string }>
+    Array<{ id: number; name: string; status?: string }>
   >([]);
   const [submitting, setSubmitting] = useState(false);
 
@@ -98,7 +102,12 @@ export default function RegisterPage() {
 
         if (segmentsRes.ok) {
           const segmentsList = await segmentsRes.json();
-          setDbSegments(segmentsList);
+          if (Array.isArray(segmentsList)) {
+            setDbSegments(segmentsList);
+          } else {
+            console.error("Expected array of segments in registration page, received:", segmentsList);
+            setDbSegments([]);
+          }
         }
       } catch (err) {
         console.error("Error fetching settings/segments:", err);
@@ -133,6 +142,14 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+    if (formData.password.length < 8) {
+      toast.error("Password must be at least 8 characters long");
+      return;
+    }
     setSubmitting(true);
     try {
       const res = await fetch("/api/register", {
@@ -146,7 +163,21 @@ export default function RegisterPage() {
       const data = await res.json();
       if (res.ok) {
         toast.success(data.message || "Registration submitted successfully!");
-        router.push("/dashboard/events");
+        
+        // Auto-login the user immediately after registering
+        const loginRes = await signIn("credentials", {
+          redirect: false,
+          email: formData.email,
+          password: formData.password,
+        });
+
+        if (loginRes?.error) {
+          console.error("Auto-login failed:", loginRes.error);
+          toast.error("Auto-login failed. Please log in manually.");
+          router.push("/login");
+        } else {
+          router.push("/dashboard/events");
+        }
       } else {
         toast.error(data.message || "Failed to submit registration.");
       }
@@ -414,16 +445,66 @@ export default function RegisterPage() {
                   <option value="" className="bg-[#18181f]">
                     Select a segment
                   </option>
-                  {dbSegments.map((seg) => (
-                    <option
-                      key={seg.id}
-                      value={seg.name}
-                      className="bg-[#18181f]"
-                    >
-                      {seg.name}
-                    </option>
-                  ))}
+                  {dbSegments
+                    .filter((seg) => !seg.status || seg.status === "active")
+                    .map((seg) => (
+                      <option
+                        key={seg.id}
+                        value={seg.name}
+                        className="bg-[#18181f]"
+                      >
+                        {seg.name}
+                      </option>
+                    ))}
                 </select>
+              </div>
+
+              {/* Password */}
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                >
+                  Password * (At least 8 characters)
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    required
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="w-full bg-[#18181f] border border-white/[0.07] rounded-lg px-12 py-3 text-[#F5F5F0] placeholder:text-[#5A5A52] focus:outline-none focus:border-[#588157] transition-colors"
+                    style={{ fontSize: "16px" }}
+                    placeholder="Enter your password"
+                  />
+                </div>
+              </div>
+
+              {/* Confirm Password */}
+              <div>
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                >
+                  Confirm Password *
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                  <input
+                    type="password"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    required
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    className="w-full bg-[#18181f] border border-white/[0.07] rounded-lg px-12 py-3 text-[#F5F5F0] placeholder:text-[#5A5A52] focus:outline-none focus:border-[#588157] transition-colors"
+                    style={{ fontSize: "16px" }}
+                    placeholder="Confirm your password"
+                  />
+                </div>
               </div>
 
               {/* Submit Button */}
