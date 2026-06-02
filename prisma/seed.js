@@ -5,6 +5,7 @@ async function main() {
   console.log('Seeding database...');
 
   // 1. Clear existing data
+  await prisma.activity.deleteMany({});
   await prisma.setting.deleteMany({});
   await prisma.leaderboard.deleteMany({});
   await prisma.certificate.deleteMany({});
@@ -91,9 +92,22 @@ async function main() {
     email: process.env.ADMIN_EMAIL,
     passwordHash: hashedPassword,
     role: 'admin',
+    emailVerified: new Date(),
     avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&q=80'
   };
   await prisma.user.create({ data: defaultAdmin });
+
+  // 9. Seed Activities
+  const activities = [
+    { title: 'New team registered', desc: 'Team "CyberKnights" joined Robo Wars.', time: new Date(Date.now() - 2 * 60 * 1000), icon: 'Users', color: 'text-blue-500' },
+    { title: 'Payment verified', desc: 'Payment received for "MechMinds".', time: new Date(Date.now() - 60 * 60 * 1000), icon: 'CheckCircle', color: 'text-[#588157]' },
+    { title: 'Schedule updated', desc: 'Line Follower moved to Arena B.', time: new Date(Date.now() - 3 * 60 * 60 * 1000), icon: 'CalendarIcon', color: 'text-purple-500' },
+    { title: 'Sponsorship inquiry', desc: 'TechCorp reached out for Gold tier.', time: new Date(Date.now() - 5 * 60 * 60 * 1000), icon: 'TrendingUp', color: 'text-amber-500' },
+    { title: 'Pending Approval', desc: 'Team "ScrapBots" needs document review.', time: new Date(Date.now() - 24 * 60 * 60 * 1000), icon: 'Clock', color: 'text-gray-400' },
+  ];
+  for (const act of activities) {
+    await prisma.activity.create({ data: act });
+  }
 
   console.log('Database successfully seeded!');
 }

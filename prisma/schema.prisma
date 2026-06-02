@@ -141,3 +141,13 @@ model Setting {
   value     String
   updatedAt DateTime @updatedAt
 }
+
+model Activity {
+  id    Int      @id @default(autoincrement())
+  title String
+  desc  String
+  time  DateTime @default(now())
+  icon  String
+  color String
+}
+
