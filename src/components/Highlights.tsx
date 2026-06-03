@@ -12,13 +12,14 @@ const photos = [
   "https://images.unsplash.com/flagged/photo-1568118782915-fa213a00a49b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkcm9uZSUyMHJhY2luZ3xlbnwxfHx8fDE3NzY1MzgxOTl8MA&ixlib=rb-4.1.0&q=80&w=1080"
 ];
 
-const leftColumnPhotos = [...photos, ...photos];
-const middleColumnPhotos = [...[...photos].reverse(), ...photos];
-const rightColumnPhotos = [...photos, ...photos];
-
 const galleryLabels = ['Robo Soccer', 'Engineering', 'Robotic Arms', 'Champions', 'Drone Racing'];
 
-export const Highlights = () => {
+export const Highlights = ({ dbPhotos }: { dbPhotos?: string[] }) => {
+  const activePhotos = dbPhotos && dbPhotos.length > 0 ? dbPhotos : photos;
+  const leftColumnPhotos = [...activePhotos, ...activePhotos];
+  const middleColumnPhotos = [...[...activePhotos].reverse(), ...activePhotos];
+  const rightColumnPhotos = [...activePhotos, ...activePhotos];
+
   return (
     <section className="py-24 sm:py-32 relative overflow-hidden">
       {/* ── Image gallery atmosphere — deeper, darker, more cinematic ── */}
