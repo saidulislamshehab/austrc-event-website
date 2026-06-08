@@ -122,14 +122,14 @@ export default function LeaderboardPage() {
         >
           Leaderboard
         </h1>
-        <p className={`text-base sm:text-lg ${isDark ? 'text-[#9A9A8E]' : 'text-[#8a8a7a]'}`}>
+        <p className={`text-base sm:text-lg ${isDark ? 'text-[#9A9A8E]' : 'text-[#4a4a40]'}`}>
           See where you stand among all participants
         </p>
       </div>
 
       {/* Event Filter */}
       <div className="mb-8">
-        <div className={`flex items-center gap-2 mb-4 ${isDark ? 'text-[#9A9A8E]' : 'text-[#8a8a7a]'}`}>
+        <div className={`flex items-center gap-2 mb-4 ${isDark ? 'text-[#9A9A8E]' : 'text-[#4a4a40]'}`}>
           <Filter className="w-4 h-4" />
           <span className="text-sm font-medium">Filter by Event:</span>
         </div>
@@ -145,7 +145,7 @@ export default function LeaderboardPage() {
                     : 'bg-[#588157]/15 text-[#3a5a40] border border-[#588157]/25'
                   : isDark
                   ? 'text-[#9A9A8E] hover:bg-white/5 border border-transparent'
-                  : 'text-[#8a8a7a] hover:bg-black/5 border border-transparent'
+                  : 'text-[#4a4a40] hover:bg-black/5 border border-transparent'
               }`}
             >
               {event.name}
@@ -161,21 +161,21 @@ export default function LeaderboardPage() {
           animate={{ opacity: 1, y: 0 }}
           className="flex flex-col items-center justify-center py-20 text-center max-w-md mx-auto px-4"
         >
-          <div className={`p-5 rounded-full mb-6 ${isDark ? 'bg-white/5 text-gray-400' : 'bg-gray-100 text-gray-700'}`}>
-            <EyeOff className="w-12 h-12 text-gray-400" />
+          <div className={`p-5 rounded-full mb-6 ${isDark ? 'bg-white/5 text-gray-400' : 'bg-black/5 text-[#3a5a40]'}`}>
+            <EyeOff className="w-12 h-12" />
           </div>
           <h2 className={`text-2xl font-bold mb-3 ${isDark ? 'text-white' : 'text-[#1a1a14]'}`} style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
             Results Pending
           </h2>
-          <p className={`text-sm leading-relaxed ${isDark ? 'text-[#9A9A8E]' : 'text-[#8a8a7a]'}`}>
+          <p className={`text-sm leading-relaxed ${isDark ? 'text-[#9A9A8E]' : 'text-[#4a4a40]'}`}>
             The leaderboard rankings for this event have not been officially declared or published by the administrators yet. Please check back later.
           </p>
         </motion.div>
       ) : leaderboard.length === 0 ? (
         <div className={`p-12 text-center rounded-2xl border border-dashed ${isDark ? 'border-white/10' : 'border-black/10'}`}>
-          <Trophy className="w-12 h-12 text-gray-500 mx-auto mb-4" />
+          <Trophy className={`w-12 h-12 mx-auto mb-4 ${isDark ? 'text-[#a3b18a]' : 'text-[#3a5a40]'}`} />
           <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-[#1a1a14]'} mb-1`}>No Leaderboard Entries</h3>
-          <p className={isDark ? 'text-[#9A9A8E]' : 'text-[#8a8a7a]'}>There are no entries recorded on the leaderboard for this segment.</p>
+          <p className={isDark ? 'text-[#9A9A8E]' : 'text-[#4a4a40]'}>There are no entries recorded on the leaderboard for this segment.</p>
         </div>
       ) : (
         <motion.div
@@ -186,8 +186,8 @@ export default function LeaderboardPage() {
           style={{
             background: isDark
               ? 'linear-gradient(135deg, rgba(58,90,64,0.06) 0%, rgba(163,177,138,0.03) 100%)'
-              : 'linear-gradient(135deg, rgba(58,90,64,0.04) 0%, rgba(163,177,138,0.02) 100%)',
-            border: `1px solid ${isDark ? 'rgba(163,177,138,0.12)' : 'rgba(58,90,64,0.15)'}`,
+              : 'linear-gradient(135deg, rgba(58,90,64,0.08) 0%, rgba(163,177,138,0.04) 100%)',
+            border: `1px solid ${isDark ? 'rgba(163,177,138,0.12)' : 'rgba(58,90,64,0.25)'}`,
           }}
         >
           <div className="overflow-x-auto -mx-4 sm:mx-0">
@@ -196,19 +196,19 @@ export default function LeaderboardPage() {
                 <tr
                   className={`border-b ${isDark ? 'border-white/10' : 'border-black/10'}`}
                   style={{
-                    background: isDark ? 'rgba(88,129,87,0.08)' : 'rgba(88,129,87,0.05)',
+                    background: isDark ? 'rgba(88,129,87,0.08)' : 'rgba(88,129,87,0.06)',
                   }}
                 >
-                  <th className="text-left px-6 py-4 font-semibold text-sm uppercase tracking-wider">
+                  <th className={`text-left px-6 py-4 font-semibold text-sm uppercase tracking-wider ${isDark ? 'text-[#9A9A8E]' : 'text-[#3a5a40]'}`}>
                     Rank
                   </th>
-                  <th className="text-left px-6 py-4 font-semibold text-sm uppercase tracking-wider">
+                  <th className={`text-left px-6 py-4 font-semibold text-sm uppercase tracking-wider ${isDark ? 'text-[#9A9A8E]' : 'text-[#3a5a40]'}`}>
                     Team
                   </th>
-                  <th className="text-left px-6 py-4 font-semibold text-sm uppercase tracking-wider">
+                  <th className={`text-left px-6 py-4 font-semibold text-sm uppercase tracking-wider ${isDark ? 'text-[#9A9A8E]' : 'text-[#3a5a40]'}`}>
                     University
                   </th>
-                  <th className="text-right px-6 py-4 font-semibold text-sm uppercase tracking-wider">
+                  <th className={`text-right px-6 py-4 font-semibold text-sm uppercase tracking-wider ${isDark ? 'text-[#9A9A8E]' : 'text-[#3a5a40]'}`}>
                     Points
                   </th>
                 </tr>
@@ -224,7 +224,7 @@ export default function LeaderboardPage() {
                       entry.isCurrentUser
                         ? isDark
                           ? 'bg-[#588157]/10 border-[#588157]/30'
-                          : 'bg-[#588157]/8 border-[#588157]/25'
+                          : 'bg-[#588157]/12 border-[#588157]/25'
                         : isDark
                         ? 'border-white/5 hover:bg-white/5'
                         : 'border-black/5 hover:bg-black/5'
@@ -234,7 +234,7 @@ export default function LeaderboardPage() {
                       <div className="flex items-center gap-3">
                         {getRankIcon(entry.rank) || (
                           <span
-                            className={`text-lg font-bold ${isDark ? 'text-[#9A9A8E]' : 'text-[#8a8a7a]'}`}
+                            className={`text-lg font-bold ${isDark ? 'text-[#9A9A8E]' : 'text-[#4a4a40]'}`}
                             style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                           >
                             {entry.rank}
@@ -265,7 +265,7 @@ export default function LeaderboardPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className={isDark ? 'text-[#9A9A8E]' : 'text-[#8a8a7a]'}>
+                      <span className={isDark ? 'text-[#9A9A8E]' : 'text-[#4a4a40]'}>
                         {entry.university}
                       </span>
                     </td>

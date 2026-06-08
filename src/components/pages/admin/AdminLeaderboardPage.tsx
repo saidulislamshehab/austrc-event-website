@@ -286,10 +286,10 @@ export default function AdminLeaderboardPage() {
             <table className="w-full min-w-[700px]">
               <thead>
                 <tr className={`border-b text-left ${isDark ? 'border-white/10' : 'border-black/10'} bg-[#588157]/5`}>
-                  <th className="px-6 py-4 font-semibold text-sm uppercase tracking-wider">Team</th>
-                  <th className="px-6 py-4 font-semibold text-sm uppercase tracking-wider">University</th>
-                  <th className="px-6 py-4 font-semibold text-sm uppercase tracking-wider text-center">Rank</th>
-                  <th className="px-6 py-4 font-semibold text-sm uppercase tracking-wider text-center">Points</th>
+                  <th className={`px-6 py-4 font-semibold text-sm uppercase tracking-wider ${isDark ? 'text-[#9A9A8E]' : 'text-[#3a5a40]'}`}>Team</th>
+                  <th className={`px-6 py-4 font-semibold text-sm uppercase tracking-wider ${isDark ? 'text-[#9A9A8E]' : 'text-[#3a5a40]'}`}>University</th>
+                  <th className={`px-6 py-4 font-semibold text-sm uppercase tracking-wider text-center ${isDark ? 'text-[#9A9A8E]' : 'text-[#3a5a40]'}`}>Rank</th>
+                  <th className={`px-6 py-4 font-semibold text-sm uppercase tracking-wider text-center ${isDark ? 'text-[#9A9A8E]' : 'text-[#3a5a40]'}`}>Points</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
@@ -315,14 +315,20 @@ export default function AdminLeaderboardPage() {
                     <td className="px-6 py-4 text-center">
                       <span className={`inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-bold ${
                         entry.rank === 1
-                          ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                          ? isDark
+                            ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                            : 'bg-amber-500/15 text-amber-800 border border-amber-500/35'
                           : entry.rank === 2
-                          ? 'bg-slate-400/10 text-slate-300 border border-slate-400/20'
+                          ? isDark
+                            ? 'bg-slate-400/10 text-slate-300 border border-slate-400/20'
+                            : 'bg-slate-400/15 text-slate-700 border border-slate-400/35'
                           : entry.rank === 3
-                          ? 'bg-amber-700/10 text-amber-600 border border-amber-700/20'
+                          ? isDark
+                            ? 'bg-amber-700/10 text-amber-600 border border-amber-700/20'
+                            : 'bg-amber-700/15 text-amber-800 border border-amber-700/35'
                           : isDark
                           ? 'bg-white/5 text-gray-400 border border-white/5'
-                          : 'bg-black/5 text-gray-500 border border-black/5'
+                          : 'bg-black/5 text-gray-600 border border-black/10'
                       }`}>
                         #{entry.rank}
                       </span>
