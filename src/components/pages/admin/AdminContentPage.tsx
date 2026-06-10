@@ -46,6 +46,8 @@ interface Sponsor {
   displayOrder: number;
 }
 
+
+
 interface SponsorForm {
   name: string;
   logoUrl: string;
@@ -185,6 +187,18 @@ export default function AdminContentPage() {
 
   const [activeTab, setActiveTab] = useState("faq");
 
+const [faqs, setFaqs] = useState<FAQ[]>([]);
+const [faqLoading, setFaqLoading] = useState(false);
+
+const [faqDialogOpen, setFaqDialogOpen] = useState(false);
+const [faqEditTarget, setFaqEditTarget] = useState<FAQ | null>(null);
+
+const [faqForm, setFaqForm] = useState({
+  question: "",
+  answer: "",
+  displayOrder: 0,
+});
+
   // ── Sponsor state ─────────────────────────────────────────────────────────
 
   const [sponsors, setSponsors] = useState<Sponsor[]>([]);
@@ -250,9 +264,23 @@ export default function AdminContentPage() {
     }
   }, []);
 
+  const fetchFaqs = useCallback(async () => {
+  setFaqLoading(true);
+
+  try {
+    const data: FAQ[] = await adminFetch("/api/admin/faqs");
+    setFaqs(data);
+  } catch {
+    toast.error("Failed to load FAQs");
+  } finally {
+    setFaqLoading(false);
+  }
+}, []);
+
   useEffect(() => {
-    if (activeTab === "sponsors") fetchSponsors();
-  }, [activeTab, fetchSponsors]);
+  if (activeTab === "sponsors") {
+    fetchSponsors();
+  }
 
   // ── Fetch announcements ───────────────────────────────────────────────────
 
@@ -415,6 +443,44 @@ export default function AdminContentPage() {
       setDeleting(false);
     }
   }
+async function handleFaqDelete(id: number) {
+  try {
+    await adminFetch(`/api/admin/faqs/${id}`, {
+      method: "DELETE",
+    });
+
+    toast.success("FAQ deleted.");
+
+    fetchFaqs();
+  } catch {
+    toast.error("Failed to delete FAQ");
+  }
+}
+
+async function handleFaqCreate() {
+  await adminFetch("/api/admin/faqs", {
+    method: "POST",
+    body: JSON.stringify(faqForm),
+  });
+
+  toast.success("FAQ created");
+  setFaqDialogOpen(false);
+  fetchFaqs();
+}
+
+async function handleFaqEdit() {
+  if (!faqEditTarget) return;
+
+  await adminFetch(`/api/admin/faqs/${faqEditTarget.id}`, {
+    method: "PUT",
+    body: JSON.stringify(faqForm),
+  });
+
+  toast.success("FAQ updated");
+  setFaqDialogOpen(false);
+  setFaqEditTarget(null);
+  fetchFaqs();
+}
 
   // ── Announcement submit ───────────────────────────────────────────────────
 
@@ -636,7 +702,7 @@ export default function AdminContentPage() {
               </button>
             </div>
             <div className="space-y-4">
-              {faqData.map((faq) => (
+          {faqs.map((faq) => (
                 <div
                   key={faq.id}
                   className={`p-5 rounded-xl border transition-all hover:border-gray-400 group flex items-start justify-between gap-4 ${itemBg}`}
@@ -658,6 +724,7 @@ export default function AdminContentPage() {
                     <p className={`${mutedText} text-sm`}>{faq.answer}</p>
                   </div>
                   <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    
                     <button
                       className={`p-2 rounded-lg transition-colors ${isDark
                         ? "hover:bg-white/10 text-gray-300"
