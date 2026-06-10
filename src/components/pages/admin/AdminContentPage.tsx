@@ -45,8 +45,13 @@ interface Sponsor {
   websiteUrl?: string | null;
   displayOrder: number;
 }
-
-
+interface FAQ {
+  id: number;
+  question: string;
+  answer: string;
+  category: string;
+  displayOrder: number;
+}
 
 interface SponsorForm {
   name: string;
@@ -278,9 +283,12 @@ const [faqForm, setFaqForm] = useState({
 }, []);
 
   useEffect(() => {
-  if (activeTab === "sponsors") {
-    fetchSponsors();
-  }
+    if (activeTab === "sponsors") {
+      fetchSponsors();
+    } else if (activeTab === "faq") {
+      fetchFaqs();
+    }
+  }, [activeTab, fetchSponsors, fetchFaqs]);
 
   // ── Fetch announcements ───────────────────────────────────────────────────
 
