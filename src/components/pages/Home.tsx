@@ -4,7 +4,7 @@ import { Ticker } from '@/components/Ticker';
 import { Segments } from '@/components/Segments';
 import { About } from '@/components/About';
 import { PrizePool } from '@/components/PrizePool';
-import { Sponsors } from '@/components/Sponsors';
+import { SponsorsCarousel } from '@/components/SponsorsCarousel';
 import { Highlights } from '@/components/Highlights';
 import { Testimonials } from '@/components/Testimonials';
 import { CTABanner } from '@/components/CTABanner';
@@ -28,7 +28,7 @@ export default function Home({
       <Segments dbSegments={dbSegments} />
       <About />
       <PrizePool />
-      <Sponsors dbSponsors={dbSponsors} />
+      <SponsorsCarousel />
       <Highlights dbPhotos={dbPhotos} />
       <Testimonials />
       <CTABanner />
