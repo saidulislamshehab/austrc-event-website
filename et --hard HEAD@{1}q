@@ -1,0 +1,9 @@
+[33ma219784[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: pull origin main: Fast-forward
+[33m26ac901[m HEAD@{1}: checkout: moving from sponsorBugFix to main
+[33mda801f1[m[33m ([m[1;31morigin/sponsorBugFix[m[33m, [m[1;32msponsorBugFix[m[33m)[m HEAD@{2}: commit: fix: sponsors not appearing on user facing page
+[33m26ac901[m HEAD@{3}: checkout: moving from main to sponsorBugFix
+[33m26ac901[m HEAD@{4}: pull origin main: Fast-forward
+[33m752c43b[m[33m ([m[1;31morigin/feature/sponsor-system[m[33m, [m[1;32mfeature/sponsor-system[m[33m)[m HEAD@{5}: checkout: moving from feature/sponsor-system to main
+[33m752c43b[m[33m ([m[1;31morigin/feature/sponsor-system[m[33m, [m[1;32mfeature/sponsor-system[m[33m)[m HEAD@{6}: checkout: moving from main to feature/sponsor-system
+[33m752c43b[m[33m ([m[1;31morigin/feature/sponsor-system[m[33m, [m[1;32mfeature/sponsor-system[m[33m)[m HEAD@{7}: commit: feat: complete sponsor system with CRUD APIs and public display
+[33m6b9c1dc[m HEAD@{8}: clone: from https://github.com/neoFlare19/arc-event-website.git
