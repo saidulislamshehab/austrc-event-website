@@ -1,14 +1,13 @@
-import React from 'react';
-import { Hero } from '@/components/Hero';
-import { Ticker } from '@/components/Ticker';
-import { Segments } from '@/components/Segments';
 import { About } from '@/components/About';
-import { PrizePool } from '@/components/PrizePool';
-import { SponsorsCarousel } from '@/components/SponsorsCarousel';
-import { Highlights } from '@/components/Highlights';
-import { Testimonials } from '@/components/Testimonials';
 import { CTABanner } from '@/components/CTABanner';
 import { FAQ } from '@/components/FAQ';
+import { Hero } from '@/components/Hero';
+import { Highlights } from '@/components/Highlights';
+import { PrizePool } from '@/components/PrizePool';
+import { Segments } from '@/components/Segments';
+import { SponsorsCarousel } from '@/components/SponsorsCarousel';
+import { Testimonials } from '@/components/Testimonials';
+import { Ticker } from '@/components/Ticker';
 
 export default function Home({
   dbSegments,

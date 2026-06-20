@@ -36,9 +36,27 @@ export const Navbar = () => {
     return () => { document.body.style.overflow = ''; };
   }, [mobileMenuOpen]);
 
+  const [leaderboardEnabled, setLeaderboardEnabled] = useState(true);
+
+  useEffect(() => {
+    async function checkSettings() {
+      try {
+        const res = await fetch('/api/settings');
+        if (res.ok) {
+          const settings = await res.json();
+          setLeaderboardEnabled(settings.enable_leaderboard !== 'false');
+        }
+      } catch (err) {
+        console.error('Failed to fetch settings in Navbar:', err);
+      }
+    }
+    checkSettings();
+  }, []);
+
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Segments', path: '/segments' },
+    ...(leaderboardEnabled ? [{ name: 'Leaderboard', path: '/leaderboard' }] : []),
     { name: 'Schedule', path: '/schedule' },
     { name: 'Sponsors', path: '/sponsors' },
     { name: 'About', path: '/about' },

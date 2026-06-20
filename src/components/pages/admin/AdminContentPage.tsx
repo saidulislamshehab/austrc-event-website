@@ -805,23 +805,6 @@ async function handleFaqEdit() {
             Update website copy, FAQs, and manage sponsors.
           </p>
         </div>
-        <button
-          onClick={
-            activeTab === "sponsors" && !usingFallback ? openCreate :
-              activeTab === "announcements" ? openCreateAnnouncement :
-                activeTab === "past-events" ? openCreatePastEvent :
-                  activeTab === "reviews" ? openCreateReview :
-                    undefined
-          }
-          className="px-4 py-2 rounded-lg font-semibold transition-all shadow-[0_2px_12px_rgba(0,0,0,0.15)] flex items-center gap-2 bg-[#3a5a40] text-white hover:bg-[#344e41]"
-        >
-          <Plus className="w-4 h-4" />
-          {activeTab === "sponsors" ? "Add Sponsor" :
-            activeTab === "announcements" ? "Add Announcement" :
-              activeTab === "past-events" ? "Add Past Event" :
-                activeTab === "reviews" ? "Add Review" :
-                  "Add Content"}
-        </button>
       </div>
 
       {/* Tabs */}
